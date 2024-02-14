@@ -1,4 +1,4 @@
-package br.com.pagamento.exception;
+package br.com.pagamento.handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.pagamento.dto.ErrorMessageDTO;
+import br.com.pagamento.exception.LimiteUltrapassadoException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 
@@ -50,6 +51,11 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 	    return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
 	}
 
-
+	@ExceptionHandler(LimiteUltrapassadoException.class)
+	@ResponseBody
+	public ResponseEntity<Object> handleLimiteUltrapassadoException(HttpServletRequest req, LimiteUltrapassadoException ex) {
+		ErrorMessageDTO errorInfo = new ErrorMessageDTO(req.getRequestURI().toString() , ex.getMessage());
+	    return new ResponseEntity<>(errorInfo, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
 
 }

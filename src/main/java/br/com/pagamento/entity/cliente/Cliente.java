@@ -11,8 +11,8 @@ public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private Double limite;
-	private Double saldoInicial;
+	private Integer limite;
+	private Integer saldoInicial;
 	
 	public Integer getId() {
 		return id;
@@ -20,16 +20,16 @@ public class Cliente {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Double getLimite() {
+	public Integer getLimite() {
 		return limite;
 	}
-	public void setLimite(Double limite) {
+	public void setLimite(Integer limite) {
 		this.limite = limite;
 	}
-	public Double getSaldoInicial() {
+	public Integer getSaldoInicial() {
 		return saldoInicial;
 	}
-	public void setSaldoInicial(Double saldoInicial) {
+	public void setSaldoInicial(Integer saldoInicial) {
 		this.saldoInicial = saldoInicial;
 	}
 	

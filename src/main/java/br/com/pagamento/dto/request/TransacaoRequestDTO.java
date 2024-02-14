@@ -5,6 +5,7 @@ import java.io.Serializable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class TransacaoRequestDTO implements Serializable {
 
@@ -16,6 +17,7 @@ public class TransacaoRequestDTO implements Serializable {
 	@NotBlank(message = "Informe um tipo de transação")
 	private String tipo;
     @NotBlank(message = "Informe uma descrição")
+    @Size(max = 10)
 	private String descricao;
 	
 	public Integer getValor() {
