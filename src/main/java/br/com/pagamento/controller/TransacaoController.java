@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pagamento.dto.request.TransacaoRequestDTO;
+import br.com.pagamento.dto.response.TransacaoResponseDTO;
 import br.com.pagamento.entity.cliente.Cliente;
 import br.com.pagamento.exception.InvalidParamException;
 import br.com.pagamento.service.ClienteService;
@@ -41,14 +42,18 @@ public class TransacaoController {
 		if(!isTipoTransacaoCorreta(transacao))
 			throw new InvalidParamException(TIPO_TRANSACAO_INCORRETA);
 		
-		Optional<Cliente> cliente = clienteService.findClienteById(id);
+		Cliente cliente = clienteService.findClienteById(id);
 		
-		if(cliente.isEmpty()) 
+		if(cliente == null) 
 			return ResponseEntity.notFound().build();
 		
-		service.executeTransaction(cliente.get(), transacao);
+		Cliente cli = service.executeTransaction(cliente, transacao);
 		
-		return ResponseEntity.ok().build();
+		TransacaoResponseDTO response = null;
+		if(cli != null) 
+			response = new TransacaoResponseDTO(cli.getLimite(), cli.getSaldoInicial());
+		
+		return ResponseEntity.ok().body(response);
 	}
 
 	private boolean isTipoTransacaoCorreta(TransacaoRequestDTO transacao) {

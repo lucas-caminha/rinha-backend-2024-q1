@@ -1,7 +1,5 @@
 package br.com.pagamento.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +12,12 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository repository;
 
-	public Optional<Cliente> findClienteById(Integer id) {
-		return repository.findById(id);
+	public Cliente findClienteById(Integer id) {
+		return repository.findById(id).get();
 	}
 
-	public void save(Cliente cliente) {
-		repository.save(cliente);
+	public Cliente save(Cliente cliente) {
+		return repository.save(cliente);
 	}
 	
 }

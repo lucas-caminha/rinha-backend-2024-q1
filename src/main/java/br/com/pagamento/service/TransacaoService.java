@@ -16,35 +16,32 @@ public class TransacaoService {
 	@Autowired
 	private ClienteService clienteService;
 
-	public void executeTransaction(Cliente cliente, TransacaoRequestDTO transacao) {
-		
+	public Cliente executeTransaction(Cliente cliente, TransacaoRequestDTO transacao) {	
 		if(TipoTransacaoEnum.DEBITO.getKey().equals(transacao.getTipo())) {
 			executeTransactionDebit(cliente, transacao);
+		} else if(TipoTransacaoEnum.CREDITO.getKey().equals(transacao.getTipo())) {
+			executeTransactionCredit(cliente, transacao);
 		}
 		
-		if(TipoTransacaoEnum.CREDITO.getKey().equals(transacao.getTipo())) {
-			
-		}
+		return cliente;
+	}
+
+	private void executeTransactionCredit(Cliente cliente, TransacaoRequestDTO transacao) {
+		// TODO Auto-generated method stub
 		
 	}
 
-	private void executeTransactionDebit(Cliente cliente, TransacaoRequestDTO transacao) {
-		
-		Integer valor = transacao.getValor();
-		Integer limite = cliente.getLimite();
-		Integer saldo = cliente.getSaldoInicial();
-		
-		if(atingiuLimite(valor, limite, saldo)) 
+	public Cliente executeTransactionDebit(Cliente cliente, TransacaoRequestDTO transacao) {		
+		if(atingiuLimite(transacao.getValor(), cliente.getLimite(), cliente.getSaldoInicial())) 
 			throw new LimiteUltrapassadoException(LIMITE_ULTRAPASSADO);
 		
-		Integer novoSaldo = debit(saldo, valor);
+		Integer novoSaldo = debite(cliente.getSaldoInicial(), transacao.getValor());		
+		cliente.setSaldoInicial(novoSaldo);		
 		
-		cliente.setSaldoInicial(novoSaldo);
-		
-		clienteService.save(cliente);
+		return clienteService.save(cliente);
 	}
 	
-	private Integer debit(Integer saldo, Integer valor) {
+	private Integer debite(Integer saldo, Integer valor) {
 		saldo = (saldo - valor);
 		return saldo;
 	}
